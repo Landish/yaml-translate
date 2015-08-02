@@ -1,0 +1,26 @@
+{
+  "name": "yaml-translate",
+  "version": "1.0.0",
+  "description": "Translate YAML files.",
+  "main": "index.js",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "fs-extra": "^0.22.1",
+    "yamljs": "^0.2.3",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start" : "node example.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Landish/yaml-translate.git"
+  },
+  "author": "Lado Lomidze <lado.lomidze@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Landish/yaml-translate/issues"
+  },
+  "homepage": "https://github.com/Landish/yaml-translate#readme"
+}
