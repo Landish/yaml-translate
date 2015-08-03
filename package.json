@@ -6,12 +6,13 @@
   "dependencies": {
     "colors": "^1.1.2",
     "fs-extra": "^0.22.1",
-    "yamljs": "^0.2.3",
-    "underscore": "^1.8.3"
+    "globby": "^2.1.0",
+    "underscore": "^1.8.3",
+    "yamljs": "^0.2.3"
   },
   "devDependencies": {},
   "scripts": {
-    "start" : "node example.js"
+    "start": "node example.js"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,13 @@
 var fs = require('fs-extra');
 var yaml = require('yamljs');
 var colors = require('colors');
+var globby = require('globby');
 var _ = require('underscore');
 
-function Translate(options) {
+function Translate() {
 
+    var self = this;
+    this.data = {};
 
     this.setOptions = function(options) {
 
@@ -12,7 +15,7 @@ function Translate(options) {
 
         // options
         this.options = _.defaults(options, {
-            src: './language.yml',
+            src: ['language/*.yml', 'language/*.yaml'],
             outputDir: 'locale',
             clean: false,
             only: [], // string or array
@@ -20,7 +23,12 @@ function Translate(options) {
         });
 
         try {
-            this.src = yaml.load(this.options.src);
+
+            _.each(globby.sync(this.options.src), function(i) {
+                self.data = _.extend(yaml.load(i), self.data);
+            });
+
+
         } catch(e) {
             console.log(colors.red(e.message));
         }
@@ -29,11 +37,10 @@ function Translate(options) {
 
     this.translate = function(options) {
 
-        var self = this;
         self.setOptions(options);
 
-        self.getLangKeys(self.src).forEach(function(lang) {
-            var data = self.getTranslatedStringByLangKey(self.src, lang);
+        self.getLangKeys(self.data).forEach(function(lang) {
+            var data = self.getTranslatedStringByLangKey(self.data, lang);
 
             if(self.options.clean) {
                 fs.removeSync(self.options.outputDir);
@@ -75,7 +82,6 @@ function Translate(options) {
     this.getTranslatedStringByLangKey = function(array, lang) {
         var strings = {};
         var keys = _.keys(array);
-        var self = this;
         keys.forEach(function(key) {
             strings[key] = self.transStringByLangKey(array[key], lang);
         });
