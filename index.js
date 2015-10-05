@@ -3,6 +3,11 @@ var yaml = require('yamljs');
 var colors = require('colors');
 var globby = require('globby');
 var _ = require('underscore');
+var through = require('through2');
+var gutil = require('gulp-util');
+var PluginError = gutil.PluginError;
+
+const PLUGIN_NAME = 'yaml-translate';
 
 function Translate() {
 
@@ -15,7 +20,7 @@ function Translate() {
 
         // options
         this.options = _.defaults(options, {
-            src: ['language/*.yml', 'language/*.yaml'],
+            src: ['language/*.{yml, yaml}'],
             outputDir: 'locale',
             clean: false,
             only: [], // string or array
@@ -107,7 +112,21 @@ function Translate() {
         });
     };
 
+
+    // Creating a stream through which each file will pass
+    return through.obj(function(file, enc, cb) {
+
+        if (file.isNull()) return cb(null, file);
+        if (file.isStream()) return cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+
+        self.translate(self.options);
+
+
+        cb(null, file);
+
+    });
+
 }
 
 // export to module
-module.exports = new Translate;
+module.exports = Translate;
